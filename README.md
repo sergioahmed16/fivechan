@@ -192,3 +192,129 @@ public class UserController {
     }
 }
 ```
+
+### Fabricio Huaquisto
+#### Clean Code
+
+##### 1. Nombrado Significativo
+
+Los nombres de las clases y métodos son claros y descriptivos.
+
+**Ejemplo:**
+
+```java
+public class TopicEntity {
+    @Id
+    private UUID id;
+    private UUID userId;
+    private String title;
+    private String content;
+
+    // Métodos
+}
+```
+```java
+public class Topic {
+    private UUID id;
+    private UUID userId;
+    private String title;
+    private String content;
+    
+    // Métodos
+}
+```
+
+##### 2. Funciones Pequeñas y Centradas
+Cada método realiza una tarea específica, lo que facilita su comprensión y mantenimiento.
+
+```java
+@Override
+@Transactional
+public void update(Topic topic) {
+    TopicEntity topicEntity = TopicEntity.fromDomain(topic);
+    entityManager.merge(topicEntity);
+}
+
+@Override
+public List<Topic> findByUserId(UUID userId) {
+    TypedQuery<TopicEntity> query = entityManager.createQuery(
+            "SELECT t FROM TopicEntity t WHERE t.userId = :userId", TopicEntity.class);
+    query.setParameter("userId", userId);
+    return query.getResultList().stream()
+            .map(TopicEntity::toDomain)
+            .toList();
+}
+
+```
+
+
+#### Estilos de programación
+
+##### 1. Restful
+
+```Java
+@RestController
+@RequestMapping("/topic")
+public class TopicController {
+    private final TopicService topicService;
+
+    @Autowired
+    public TopicController(TopicService topicService) {
+        // ...
+    }
+
+    @PostMapping
+    public  void createTopic(@RequestBody TopicDTO topic) {
+        // ...
+    }
+}
+```
+
+#### 2. Error/Exception Handling
+
+```java
+ @ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Topic no encontrado")  // 404
+ public class TopicNotFoundException extends RuntimeException {
+     // ...
+ }
+```
+
+Esta excepción personalizada se usa en:
+
+```java
+@PostMapping("/{id}")
+public void findTopic(@RequestBody UUID topicId) {
+    Topic topic = this.topicRepository.findById(topicId);
+    
+    if (topic == null) throw new TopicNotFoundException(topicId);
+    
+    return topic;
+}
+```
+
+#### 3. Persistent-Tables
+
+```java
+@Entity
+public class TopicEntity {
+    @Id
+    private UUID id;
+    private UUID userId;
+    private String title;
+    private String content;
+    
+    // ...
+}
+```
+
+```java
+@Repository
+public class JpaTopicRepository implements TopicRepository {
+    @PersistenceContext
+    protected EntityManager entityManager;
+    
+    // ...
+}
+```
+
+![table_topic.png](table_topic.png)
