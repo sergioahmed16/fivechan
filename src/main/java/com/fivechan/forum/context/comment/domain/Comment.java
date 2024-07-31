@@ -1,5 +1,5 @@
 package com.fivechan.forum.context.comment.domain;
-
+//
 import java.util.UUID;
 
 public class Comment {
