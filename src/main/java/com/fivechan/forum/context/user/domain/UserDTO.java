@@ -4,11 +4,13 @@ public class UserDTO {
     private String name;
     private String description;
     private String avatar;
+    private String email;
 
-    public UserDTO(String name, String description, String avatar) {
+    public UserDTO(String name, String description, String avatar, String email) {
         this.name = name;
         this.description = description;
         this.avatar = avatar;
+        this.email = email;
     }
 
     public String getName() {
@@ -33,5 +35,13 @@ public class UserDTO {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
