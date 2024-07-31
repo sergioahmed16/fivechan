@@ -3,6 +3,7 @@ package com.fivechan.forum.context.comment.application;
 import com.fivechan.forum.context.comment.domain.Comment;
 import com.fivechan.forum.context.comment.domain.CommentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,27 +40,60 @@ public class CommentController {
     }
 
     @PostMapping
-    public void createComment(@RequestBody CommentDTO commentDTO) {
-        commentService.createComment(commentDTO);
+    public ResponseEntity<?> createComment(@RequestBody CommentDTO commentDTO) {
+        try {
+            commentService.createComment(commentDTO);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal server error");
+        }
     }
 
     @GetMapping
-    public List<Comment> getAllComments() {
-        return commentService.getAllComments();
+    public ResponseEntity<List<Comment>> getAllComments() {
+        try {
+            List<Comment> comments = commentService.getAllComments();
+            return ResponseEntity.ok(comments);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     @GetMapping("/{id}")
-    public Comment getCommentById(@PathVariable UUID id) {
-        return commentService.getCommentById(id);
+    public ResponseEntity<?> getCommentById(@PathVariable UUID id) {
+        try {
+            Comment comment = commentService.getCommentById(id);
+            return ResponseEntity.ok(comment);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal server error");
+        }
     }
 
     @PutMapping("/{id}")
-    public void updateComment(@PathVariable UUID id, @RequestBody CommentDTO commentDTO) {
-        commentService.updateComment(id, commentDTO);
+    public ResponseEntity<?> updateComment(@PathVariable UUID id, @RequestBody CommentDTO commentDTO) {
+        try {
+            commentService.updateComment(id, commentDTO);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal server error");
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteComment(@PathVariable UUID id) {
-        commentService.deleteComment(id);
+    public ResponseEntity<?> deleteComment(@PathVariable UUID id) {
+        try {
+            commentService.deleteComment(id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Internal server error");
+        }
     }
 }
