@@ -17,6 +17,25 @@ public class CommentController {
     @Autowired
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
+        initialize();
+    }
+
+    public void initialize() {
+        loadConfigurations();
+        initializeComponents();
+        startServices();
+    }
+
+    private void loadConfigurations() {
+        // Implementation for loading configurations
+    }
+
+    private void initializeComponents() {
+        // Implementation for initializing components
+    }
+
+    private void startServices() {
+        // Implementation for starting services
     }
 
     @PostMapping
