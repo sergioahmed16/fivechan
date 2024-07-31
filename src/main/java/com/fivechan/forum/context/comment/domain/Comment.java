@@ -53,4 +53,37 @@ public class Comment {
     public void setContent(String content) {
         this.content = content;
     }
+
+    // Pipeline style methods
+
+    public Comment validate() {
+        // Step 1: Validate comment
+        if (userId == null || topicId == null || content == null || content.trim().isEmpty()) {
+            throw new IllegalArgumentException("Invalid comment data");
+        }
+        return this;
+    }
+
+    public Comment sanitize() {
+        // Step 2: Sanitize comment content
+        this.content = this.content.replaceAll("<[^>]*>", ""); // Remove HTML tags
+        return this;
+    }
+
+    public Comment save() {
+        // Step 3: Save comment
+        // Simulate saving to a database
+        System.out.println("Comment saved: " + this);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", topicId=" + topicId +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }
